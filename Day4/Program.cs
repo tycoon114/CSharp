@@ -4,7 +4,17 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            int korean = 10;
+            int math = 100;
+            int english = 50;
+
+            int total = (korean + math + english);
+
+            float avg = total / 3.0f;
+
+            Console.WriteLine(avg);
+
         }
+
     }
 }
