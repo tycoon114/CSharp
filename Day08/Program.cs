@@ -31,8 +31,9 @@
             //Console.WriteLine(a);
 
 
-            class1.deckBuild();
-
+            //class1.deckBuild();
+            BlackJack blackJack = new BlackJack();
+            blackJack.Main();
 
 
 
