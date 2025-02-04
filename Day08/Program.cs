@@ -34,7 +34,8 @@
             //class1.deckBuild();
             BlackJack blackJack = new BlackJack();
             blackJack.Main();
-
+            Class2 class2 = new Class2();
+            class2.Main();
 
 
 
