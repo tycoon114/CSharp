@@ -42,10 +42,13 @@ namespace Day08
 
             static void Print(int[] deck)
             {
-                for (int i = 0; i < 8; ++i)
-                {
-                    Console.WriteLine($"{CheckCardType(deck[i]).ToString()} {CheckCardName(deck[i])}");
-                }
+                //for (int i = 0; i <3; ++i)
+                //{
+                //    Console.WriteLine($"{CheckCardType(deck[i]).ToString()} {CheckCardName(deck[i])}");
+                //}
+
+
+
             }
 
             static CardType CheckCardType(int cardNumber)
@@ -100,6 +103,9 @@ namespace Day08
 
         static void blackJackDraw(int[] deck)
         {
+
+            PrintCardList(deck);
+
             string[] player = new string[2];
             int playerScore =0, computerScore;
 
@@ -108,14 +114,61 @@ namespace Day08
             playerScore = blackJackScore(deck[0]) + blackJackScore(deck[2]) + blackJackScore(deck[4]);
             computerScore = blackJackScore(deck[1]) + blackJackScore(deck[3]) + blackJackScore(deck[5]);
 
-            Console.WriteLine($"{playerScore} {computerScore}");
+            Console.WriteLine($"player : {playerScore}  Comp :  {computerScore}");
+
+            if (playerScore >= 21 && computerScore < 21)
+            {
+                //Computer Win
+                Console.WriteLine("Computer Win");
+            }
+            else if (playerScore < 21 && computerScore >= 21)
+            {
+                //Player Win
+                Console.WriteLine("Player Win");
+            }
+            else if (playerScore >= 21 && computerScore >= 21)
+            {
+                //Player Win
+                Console.WriteLine("Player Win");
+            }
+            else if (computerScore <= playerScore)
+            {
+                //Player Win
+                Console.WriteLine("Player Win");
+            }
+            else // (computerScore > playerScore)
+            {
+                //Computer Win
+                Console.WriteLine("Computer Win");
+            }
+
+
 
         }
 
         static int  blackJackScore(int cardNum) {
-
-            return ((cardNum -1)%13)+1;
+            int value = (((cardNum - 1) % 13) + 1) > 10 ? 10 : ((cardNum - 1) % 13) + 1;
+            return value;
         }
+
+        static void PrintCardList(int[] deck)
+        {
+            //
+            Console.WriteLine("Player");
+            for (int i = 0; i < 3; ++i)
+            {
+                Console.WriteLine($"{CheckCardType(deck[i]).ToString()} {CheckCardName(deck[i])}");
+            }
+            Console.WriteLine("-------------");
+
+            Console.WriteLine("Computer");
+            for (int i = 3; i < 6; ++i)
+            {
+                Console.WriteLine($"{CheckCardType(deck[i]).ToString()} {CheckCardName(deck[i])}");
+            }
+            Console.WriteLine("-------------");
+        }
+
 
     }
 }
