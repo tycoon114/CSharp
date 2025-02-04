@@ -60,25 +60,10 @@ namespace Day08
                 int k = deck[i] / 13;
 
                 string teir = checkTier(deck[i]);
-                string temp = "";
+                string card = checkCard(deck[i]);
 
-                if (k == 0)
-                {
-                    temp = "Heart";
-                }
-                else if (k == 1)
-                {
-                    temp = "Dia";
-                }
-                else if (k == 2)
-                {
-                    temp = "Clov";
-                }
-                else if (k == 3) {
-                    temp = "Spade";
-                }
 
-                Console.WriteLine(temp + "  " + teir);
+                Console.WriteLine(card + "  " + teir);
             }
         }
 
@@ -109,6 +94,28 @@ namespace Day08
             return numb.ToString();
         }
 
+
+        public string checkCard(int card) {
+
+            string temp = "";
+            if (card >= 0 && card<14)
+            {
+                temp = "Heart";
+            }
+            else if (card >= 13 && card<27)
+            {
+                temp = "Dia";
+            }
+            else if (card >= 27 && card <40)
+            {
+                temp = "Clov";
+            }
+            else if (card >= 40 && card < 53)
+            {
+                temp = "Spade";
+            }
+            return temp;
+        }
 
     }
 }
