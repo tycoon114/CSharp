@@ -14,9 +14,9 @@ namespace Day17
 
         protected ConsoleKeyInfo keyInfo;
 
-        public void Input() 
-        { 
-            keyInfo = Console.ReadKey();
+        public void ProcessInput() 
+        {
+            Input.Process();
         }
 
         public void Load() {
@@ -83,6 +83,7 @@ namespace Day17
 
         protected void Render()
         {
+            Console.Clear();
             world.Render();
         }
 
@@ -90,11 +91,13 @@ namespace Day17
         public void Run()
         {
             while (isRunning) { 
-                Input();
+                ProcessInput();
                 Update();
                 Render();
             }
         }
+
+
 
         public World world;
     }
