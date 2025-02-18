@@ -30,7 +30,6 @@ namespace Day18
                 {
                     X--;
                 }
-
             }
             if (Input.GetKeyDown(ConsoleKey.S) || Input.GetKeyDown(ConsoleKey.DownArrow))
             {

@@ -103,10 +103,6 @@ namespace Day18
 
 
         public void isCollison() { 
-            //벽에 닿으면 움직이지 않기
-
-            //몬스터는 벽과 골 둘다 닿지 않기
-
             //몬스터에 닿으면 GameOver 부르기
 
             //골에 닿으면 Clear
