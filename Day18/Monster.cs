@@ -21,19 +21,31 @@ namespace Day18
             int monsterPosition = rand.Next(0, 4);
 
             if (monsterPosition == 0) {
-                Y--;
+                if (Y != 1)
+                {
+                    Y--;
+                }
             }
             if (monsterPosition == 1)
             {
-                X--;
+                if (X != 1)
+                {
+                    X--;
+                }
             }
             if (monsterPosition == 2)
             {
-                Y++;
+                if (Y != 8)
+                {
+                    Y++;
+                }
             }
             if (monsterPosition == 3)
             {
-                X++;
+                if (X != 8)
+                {
+                    X++;
+                }
             }
 
         }

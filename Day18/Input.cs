@@ -16,7 +16,6 @@ namespace Day18
         }
         static public void Process() { 
             ConsoleKeyInfo = Console.ReadKey();
-
         }
 
         static public bool GetKeyDown(ConsoleKey key)

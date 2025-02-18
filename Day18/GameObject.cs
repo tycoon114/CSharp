@@ -15,7 +15,7 @@ namespace Day18
 
         public virtual void Update()
         {
-            
+
         }
 
         public virtual void Render()

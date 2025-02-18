@@ -19,19 +19,32 @@ namespace Day18
         {
             if (Input.GetKeyDown(ConsoleKey.W) || Input.GetKeyDown(ConsoleKey.UpArrow))
             {
-                Y--;
+                if (Y != 1)
+                {
+                    Y--;
+                }
             }
             if (Input.GetKeyDown(ConsoleKey.A) || Input.GetKeyDown(ConsoleKey.LeftArrow))
             {
-                X--;
+                if (X != 1)
+                {
+                    X--;
+                }
+
             }
             if (Input.GetKeyDown(ConsoleKey.S) || Input.GetKeyDown(ConsoleKey.DownArrow))
             {
-                Y++;
+                if (Y != 8)
+                {
+                    Y++;
+                }
             }
             if (Input.GetKeyDown(ConsoleKey.D) || Input.GetKeyDown(ConsoleKey.RightArrow))
             {
-                X++;
+                if (X != 8)
+                {
+                    X++;
+                }
             }
         }
     }
