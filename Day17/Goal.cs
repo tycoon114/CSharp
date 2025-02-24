@@ -13,6 +13,8 @@ namespace Day17
             X = inX;
             Y = inY;
             Shape = inShape;
+            orderLayer = 3;
+            isTrigger = true;
         }
     }
 }

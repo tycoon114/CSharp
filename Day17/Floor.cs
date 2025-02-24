@@ -13,6 +13,7 @@ namespace Day17
             X = inX;
             Y = inY;
             Shape = inShape;
+            orderLayer = 1;
         }
 
         public override void Render() { 

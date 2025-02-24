@@ -12,6 +12,8 @@ namespace Day17
             X = inX;
             Y = inY;
             Shape = inShape;
+            orderLayer = 2;
+            isCollide = true;
         }
     }
 }

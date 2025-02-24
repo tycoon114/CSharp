@@ -54,10 +54,7 @@
             //Slime s = monster[0] as Slime;
 
 
-            if (s != null)
-            { 
-                s.Sticky(); 
-            }
+
         }
     }
 }

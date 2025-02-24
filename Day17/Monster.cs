@@ -15,6 +15,9 @@ namespace Day17
             X = inX;
             Y = inY;
             Shape = inShape;
+            orderLayer = 5;
+            isTrigger = true;
+
         }
 
 
@@ -25,30 +28,33 @@ namespace Day17
 
             if (Direction == 0)
             {
-                Y--;
+                if (!PredictCollision(X, Y - 1))
+                {
+                    Y--;
+                }
             }
-
             if (Direction == 1)
             {
-                X--;
+                if (!PredictCollision(X, Y + 1))
+                {
+                    Y++;
+                }
             }
-
             if (Direction == 2)
             {
-                Y++;
+                if (!PredictCollision(X - 1, Y))
+                {
+                    X--;
+                }
             }
-
             if (Direction == 3)
             {
-                X++;
+                if (!PredictCollision(X + 1, Y))
+                {
+                    X++;
+                }
             }
         }
-
-
-
-
-
-
 
     }
 }

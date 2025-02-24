@@ -52,9 +52,11 @@
 
             BitArray32 bitarray = new BitArray32();
 
-            Map map = new Map();
+            //Map map = new Map();
             //map.Kakao();
-            map.bitQ2();
+            //map.bitQ2();
+
+            RenderEngine renderEngine = new RenderEngine();
 
         }
     }
