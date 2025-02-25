@@ -14,9 +14,12 @@ namespace Day17
 
         }
 
-        static public void Process() { 
-        
-            keyInfo = Console.ReadKey();
+        static public void Process() {
+
+            if (Console.KeyAvailable)
+            {
+                keyInfo = Console.ReadKey(true);
+            }
         }
 
 
@@ -27,8 +30,9 @@ namespace Day17
             return (keyInfo.Key == key);
         }
 
-
-
-
+         public static void ClearInput()
+        {
+          keyInfo = new ConsoleKeyInfo();
+        }
     }
 }

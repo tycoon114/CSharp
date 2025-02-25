@@ -46,6 +46,9 @@ namespace Day17
         static void Main(string[] args)
         {
 
+            Engine.Instance.Load("level01.map");
+            Engine.Instance.Run();
+
             //Singleton s = new Singleton();
 
             //Singleton s1 = new Singleton.GetInstance();
@@ -60,64 +63,40 @@ namespace Day17
 
             //engine.Run();
 
-            //int[] numbers = { 1, 5, 2, 3, 5, 6, 7, 8, 10, 9 };
 
-            //for (int i = 0; i < numbers.Length; i++)
+
+            //StreamReader sr = null;
+            //try
             //{
+            //    List<string> scene = new List<string>();
 
-            //    for (int j = 0; j < numbers.Length; j++)
+            //    sr = new StreamReader("level01.map");
+            //    while (!sr.EndOfStream)
             //    {
-            //        if (numbers[i] < numbers[j])
-            //        {
-
-            //            int temp = numbers[i];
-            //            numbers[i] = numbers[j];
-            //            numbers[j] = temp;
-            //        }
-
-
+            //        scene.Add(sr.ReadLine());
             //    }
-            //}
 
-            //for (int i = 0; i < numbers.Length; i++)
+            //}
+            //catch (FileNotFoundException e)
             //{
-            //    Console.Write(numbers[i] + " , ");
+            //    Console.WriteLine(e.FileName);
+            //    Console.WriteLine(e.Source);
+            //    Console.WriteLine(e.Message);
             //}
-
-            StreamReader sr = null;
-            try
-            {
-                List<string> scene = new List<string>();
-
-                sr = new StreamReader("level02.map");
-                while (!sr.EndOfStream)
-                {
-                    scene.Add(sr.ReadLine());
-                    //throw new CustomException();
-                }
-
-                // throw new WrongPasswordException();
-            }
-            catch (FileNotFoundException e)
-            {
-                Console.WriteLine(e.FileName);
-                Console.WriteLine(e.Source);
-                Console.WriteLine(e.Message);
-            }
-            catch (WrongPasswordException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            finally
-            {
-                //network, file 입출력
-                Console.WriteLine("finally");
-                sr.Close();
-            }
+            //catch (WrongPasswordException e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
+            //finally
+            //{
+            //    //network, file 입출력
+            //    Console.WriteLine("finally");
+            //    sr.Close();
+            //}
         }
 
 

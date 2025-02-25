@@ -16,8 +16,8 @@ namespace Day17
             orderLayer = 1;
         }
 
-        public override void Render() { 
+        //public override void Render() { 
         
-        }
+        //}
     }
 }

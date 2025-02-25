@@ -14,12 +14,12 @@ namespace Day17
 
         protected ConsoleKeyInfo keyInfo;
 
-        public void ProcessInput() 
-        {
-            Input.Process();
-        }
-
         static protected Engine instance;
+
+
+        static public char[,] backBuffer = new char[40, 40];
+        static public char[,] frontBuffer = new char[40, 40];
+
 
         static public Engine Instance
         {
@@ -34,7 +34,8 @@ namespace Day17
             }
         }
 
-        public void Load(string filename) {
+        public void Load(string filename)
+        {
 
             //string tempScene = "";
             //byte[] buffer = new byte[1024];
@@ -64,8 +65,10 @@ namespace Day17
 
 
 
-            for (int y = 0; y < scene.Count; y++) {
-                for (int x = 0; x < scene[y].Length; x++) {
+            for (int y = 0; y < scene.Count; y++)
+            {
+                for (int x = 0; x < scene[y].Length; x++)
+                {
                     if (scene[y][x] == '*')
                     {
                         Wall wall = new Wall(x, y, scene[y][x]);
@@ -73,7 +76,8 @@ namespace Day17
                         wall.Y = y;
                         world.Instanciate(wall);
                     }
-                    else if (scene[y][x] == ' ') { 
+                    else if (scene[y][x] == ' ')
+                    {
                         //Floor floor = new Floor(x, y, scene[y][x]);
                         //floor.X = x;
                         //floor.Y = y;
@@ -82,22 +86,16 @@ namespace Day17
                     else if (scene[y][x] == 'P')
                     {
                         Player player = new Player(x, y, scene[y][x]);
-                        player.X = x;
-                        player.Y = y;
                         world.Instanciate(player);
                     }
                     else if (scene[y][x] == 'M')
                     {
                         Monster monster = new Monster(x, y, scene[y][x]);
-                        monster.X = x;
-                        monster.Y = y;
                         world.Instanciate(monster);
                     }
                     else if (scene[y][x] == 'G')
                     {
                         Goal goal = new Goal(x, y, scene[y][x]);
-                        goal.X = x;
-                        goal.Y = y;
                         world.Instanciate(goal);
                     }
                     Floor floor = new Floor(x, y, ' ');
@@ -114,23 +112,63 @@ namespace Day17
         }
 
         protected void Update()
-        { 
+        {
             world.Update();
         }
 
         protected void Render()
         {
-            Console.Clear();
+            //Console.Clear();
             world.Render();
+
+            //IO 제일 느리다. 특히 모니터 출력 
+
+            for (int Y = 0; Y < 20; ++Y)
+            {
+                for (int X = 0; X < 40; ++X)
+                {
+
+                    if (Engine.frontBuffer[Y, X] != Engine.backBuffer[Y, X])
+                    {
+                        Engine.frontBuffer[Y, X] = Engine.backBuffer[Y, X];
+                        Console.SetCursorPosition(X, Y);
+                        Console.Write(backBuffer[Y, X]);
+                    }
+
+                }
+            }
+
         }
+
+        public void ProcessInput()
+        {
+            Input.Process();
+        }
+
 
 
         public void Run()
         {
-            while (isRunning) { 
-                ProcessInput();
-                Update();
-                Render();
+            float frameTime = 1000.0f / 60.0f;
+            float elpaseTime = 0.0f;
+            Console.CursorVisible = false;
+            while (isRunning)
+            {
+
+                Time.Update();
+                if (elpaseTime >= frameTime)
+                {
+                    ProcessInput();
+                    Update();
+                    Render();
+                    Input.ClearInput();
+                    elpaseTime = 0;
+                }
+                else
+                {
+                    elpaseTime += Time.deltaTime;
+                }
+
             }
         }
 

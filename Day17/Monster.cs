@@ -9,6 +9,10 @@ namespace Day17
     public class Monster : GameObject
     {
 
+
+        //private static elapsedTime;
+
+
         private Random rand = new Random(); 
         public Monster(int inX, int inY, char inShape)
         {
@@ -19,6 +23,7 @@ namespace Day17
             isTrigger = true;
 
         }
+
 
 
 

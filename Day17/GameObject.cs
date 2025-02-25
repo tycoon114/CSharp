@@ -42,8 +42,10 @@ namespace Day17
         public virtual void Render()
         { 
             //x y 위치에 Shape 출력
-            Console.SetCursorPosition(X, Y);
-            Console.Write(Shape);
+            //Console.SetCursorPosition(X, Y);
+            //Console.Write(Shape);
+
+            Engine.backBuffer[Y,X] = Shape;
 
         }
 
