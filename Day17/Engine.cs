@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SDL2;
 
 namespace Day17
 {
@@ -34,21 +35,49 @@ namespace Day17
             }
         }
 
+        public IntPtr myWindow;
+        public IntPtr myRenderer;
+        public SDL.SDL_Event myEvnet;
+
+        Random random = new Random();
+
+        public bool Init()
+        {
+            //엔진 초기화
+            if (SDL.SDL_Init(SDL.SDL_INIT_EVERYTHING) < 0)
+            {
+                Console.WriteLine("Init ERROR");
+                return false;
+            }
+
+            // 창 생성
+            myWindow = SDL.SDL_CreateWindow(
+                "Game",
+                100, 100,
+                640, 480,
+                SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN
+                );
+
+            myRenderer = SDL.SDL_CreateRenderer(myWindow, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED |
+               SDL.SDL_RendererFlags.SDL_RENDERER_PRESENTVSYNC |
+               SDL.SDL_RendererFlags.SDL_RENDERER_TARGETTEXTURE);
+
+
+            return true;
+        }
+
+        public bool Quit()
+        {
+            SDL.SDL_DestroyWindow(myWindow);
+            SDL.SDL_Quit();
+
+            return true;
+        }
+
+
         public void Load(string filename)
         {
 
-            //string tempScene = "";
-            //byte[] buffer = new byte[1024];
-            //FileStream fs = new FileStream("level01.map", FileMode.Open);
-
-            //fs.Seek(0, SeekOrigin.End);
-            //long fileSize = fs.Position;
-
-            //fs.Seek(0, SeekOrigin.Begin);
-            //int readCount = fs.Read(buffer, 0, (int)fileSize);
-            //tempScene = Encoding.UTF8.GetString(buffer);
-            //tempScene = tempScene.Replace("\0", "");
-            //string[] scene = tempScene.Split("\r\n");
 
             List<string> scene = new List<string>();
 
@@ -101,12 +130,8 @@ namespace Day17
                     Floor floor = new Floor(x, y, ' ');
                     world.Instanciate(floor);
                 }
-
                 world.Sort();
-
             }
-            //로딩 끝
-            //정렬 시작
 
 
         }
@@ -118,7 +143,10 @@ namespace Day17
 
         protected void Render()
         {
-            //Console.Clear();
+            //색 설정
+            SDL.SDL_SetRenderDrawColor(myRenderer, 0, 51, 102, 0);
+            //위해서 지정한 색으로 지음( 채움)
+            SDL.SDL_RenderClear(myRenderer);
             world.Render();
 
             //IO 제일 느리다. 특히 모니터 출력 
@@ -137,6 +165,7 @@ namespace Day17
 
                 }
             }
+            SDL.SDL_RenderPresent(myRenderer);
 
         }
 
@@ -149,28 +178,27 @@ namespace Day17
 
         public void Run()
         {
-            float frameTime = 1000.0f / 60.0f;
-            float elpaseTime = 0.0f;
+
             Console.CursorVisible = false;
             while (isRunning)
             {
+                SDL.SDL_PollEvent(out myEvnet);
+
 
                 Time.Update();
-                if (elpaseTime >= frameTime)
+                switch (myEvnet.type)
                 {
-                    ProcessInput();
-                    Update();
-                    Render();
-                    Input.ClearInput();
-                    elpaseTime = 0;
+                    case SDL.SDL_EventType.SDL_QUIT:
+                        isRunning = false;
+                        break;
                 }
-                else
-                {
-                    elpaseTime += Time.deltaTime;
-                }
+                Update();
+                Render();
 
             }
+
         }
+
 
 
 

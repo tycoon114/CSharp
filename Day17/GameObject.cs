@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SDL2;
 
 namespace Day17
 {
@@ -17,6 +18,10 @@ namespace Day17
 
         public bool isTrigger = false;
         public bool isCollide = false;
+        public int spriteSize = 30;
+
+
+        public SDL.SDL_Color color;
 
         public bool PredictCollision(int newX, int newY)
         {
@@ -41,12 +46,20 @@ namespace Day17
 
         public virtual void Render()
         { 
-            //x y 위치에 Shape 출력
-            //Console.SetCursorPosition(X, Y);
-            //Console.Write(Shape);
+        
 
             Engine.backBuffer[Y,X] = Shape;
 
+
+            SDL.SDL_SetRenderDrawColor(Engine.Instance.myRenderer,color.r,color.g,color.b,color.a);
+
+            SDL.SDL_Rect myRect;
+            myRect.x = X * spriteSize;
+            myRect.y = Y * spriteSize;
+            myRect.w = spriteSize;
+            myRect.h = spriteSize;
+
+            SDL.SDL_RenderFillRect(Engine.Instance.myRenderer, ref myRect);
         }
 
     }
