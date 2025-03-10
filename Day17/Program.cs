@@ -1,6 +1,6 @@
-﻿using System.Text;
-using SDL2;
-
+﻿using System;
+using System.Net.Sockets;
+using System.Text;
 
 namespace Day17
 {

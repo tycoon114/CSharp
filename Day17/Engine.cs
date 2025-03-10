@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using SDL2;
 
 namespace Day17
@@ -18,8 +14,8 @@ namespace Day17
         static protected Engine instance;
 
 
-        static public char[,] backBuffer = new char[40, 40];
-        static public char[,] frontBuffer = new char[40, 40];
+        static public char[,] backBuffer = new char[20, 40];
+        static public char[,] frontBuffer = new char[20, 40];
 
 
         static public Engine Instance
@@ -68,6 +64,7 @@ namespace Day17
 
         public bool Quit()
         {
+            SDL.SDL_DestroyRenderer(myRenderer);
             SDL.SDL_DestroyWindow(myWindow);
             SDL.SDL_Quit();
 
@@ -78,7 +75,6 @@ namespace Day17
         public void Load(string filename)
         {
 
-
             List<string> scene = new List<string>();
 
             StreamReader sr = new StreamReader(filename);
@@ -88,11 +84,7 @@ namespace Day17
             }
             sr.Close();
 
-
-
             world = new World();
-
-
 
             for (int y = 0; y < scene.Count; y++)
             {
@@ -101,8 +93,6 @@ namespace Day17
                     if (scene[y][x] == '*')
                     {
                         Wall wall = new Wall(x, y, scene[y][x]);
-                        wall.X = x;
-                        wall.Y = y;
                         world.Instanciate(wall);
                     }
                     else if (scene[y][x] == ' ')
@@ -114,12 +104,42 @@ namespace Day17
                     }
                     else if (scene[y][x] == 'P')
                     {
-                        Player player = new Player(x, y, scene[y][x]);
+                        GameObject player = new GameObject();
+                        player.Name = "Player";
+                        player.transform.X = x;
+                        player.transform.Y = y;
+
+                        player.AddComponent<PlayerController>(new PlayerController());
+                        SpriteRenderer spriteRenderer = player.AddComponent<SpriteRenderer>(new SpriteRenderer());
+                        spriteRenderer.colorKey.r = 255;
+                        spriteRenderer.colorKey.g = 0;
+                        spriteRenderer.colorKey.b = 255;
+                        spriteRenderer.colorKey.a = 255;
+                        spriteRenderer.LoadBmp("player.bmp", true);
+                        spriteRenderer.processTime = 150.0f;
+                        spriteRenderer.maxCellCountX = 5;
+
+                        spriteRenderer.Shape = 'P';
+
                         world.Instanciate(player);
                     }
                     else if (scene[y][x] == 'M')
                     {
-                        Monster monster = new Monster(x, y, scene[y][x]);
+                        GameObject monster = new GameObject();
+                        monster.Name = "Monster";
+                        monster.transform.X = x;
+                        monster.transform.Y = y;
+
+                        SpriteRenderer spriteRenderer = monster.AddComponent<SpriteRenderer>(new SpriteRenderer());
+                        spriteRenderer.colorKey.r = 255;
+                        spriteRenderer.colorKey.g = 255;
+                        spriteRenderer.colorKey.b = 255;
+                        spriteRenderer.colorKey.a = 255;
+                        spriteRenderer.LoadBmp("monster.bmp");
+
+                        spriteRenderer.Shape = 'M';
+
+
                         world.Instanciate(monster);
                     }
                     else if (scene[y][x] == 'G')
@@ -130,9 +150,8 @@ namespace Day17
                     Floor floor = new Floor(x, y, ' ');
                     world.Instanciate(floor);
                 }
-                world.Sort();
             }
-
+            world.Sort();
 
         }
 
@@ -144,7 +163,7 @@ namespace Day17
         protected void Render()
         {
             //색 설정
-            SDL.SDL_SetRenderDrawColor(myRenderer, 0, 51, 102, 0);
+            SDL.SDL_SetRenderDrawColor(myRenderer, 0, 0, 0, 0);
             //위해서 지정한 색으로 지음( 채움)
             SDL.SDL_RenderClear(myRenderer);
             world.Render();
@@ -194,7 +213,6 @@ namespace Day17
                 }
                 Update();
                 Render();
-
             }
 
         }

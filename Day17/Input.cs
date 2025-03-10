@@ -16,7 +16,8 @@ namespace Day17
 
         }
 
-        static public void Process() {
+        static public void Process()
+        {
 
             //if (Console.KeyAvailable)
             //{
@@ -24,25 +25,36 @@ namespace Day17
             //}
         }
 
-
         static protected ConsoleKeyInfo keyInfo;
 
-        static public bool GetKeyDown(ConsoleKey key) { 
-        
+        static public bool GetKeyDown(ConsoleKey key)
+        {
             return (keyInfo.Key == key);
         }
 
-        static public bool GetKeyDown(SDL.SDL_Keycode key) {
-
-
-           return (Engine.Instance.myEvnet.key.keysym.sym == key);
-
+        static public bool GetKeyDown(SDL.SDL_Keycode key)
+        {
+            if (Engine.Instance.myEvnet.type == SDL.SDL_EventType.SDL_KEYDOWN)
+            {
+                return (Engine.Instance.myEvnet.key.keysym.sym == key);
+            }
+            return false;
         }
 
 
-         public static void ClearInput()
+        static public bool GetKeyUp(SDL.SDL_Keycode key)
         {
-          keyInfo = new ConsoleKeyInfo();
+            if (Engine.Instance.myEvnet.type == SDL.SDL_EventType.SDL_KEYUP)
+            {
+                return (Engine.Instance.myEvnet.key.keysym.sym == key);
+            }
+            return false;
+        }
+
+
+        public static void ClearInput()
+        {
+            keyInfo = new ConsoleKeyInfo();
         }
     }
 }
