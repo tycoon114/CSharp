@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using SDL2;
+using System.Drawing;
+using System.Numerics;
+using System.Threading;
 
 namespace Day17
 {
@@ -36,7 +39,7 @@ namespace Day17
         public SDL.SDL_Event myEvnet;
 
         Random random = new Random();
-
+        public World world;
         public bool Init()
         {
             //엔진 초기화
@@ -57,6 +60,7 @@ namespace Day17
             myRenderer = SDL.SDL_CreateRenderer(myWindow, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED |
                SDL.SDL_RendererFlags.SDL_RENDERER_PRESENTVSYNC |
                SDL.SDL_RendererFlags.SDL_RENDERER_TARGETTEXTURE);
+            world = new World();
 
 
             return true;
@@ -64,6 +68,7 @@ namespace Day17
 
         public bool Quit()
         {
+            isRunning = false;
             SDL.SDL_DestroyRenderer(myRenderer);
             SDL.SDL_DestroyWindow(myWindow);
             SDL.SDL_Quit();
@@ -84,7 +89,6 @@ namespace Day17
             }
             sr.Close();
 
-            world = new World();
 
             for (int y = 0; y < scene.Count; y++)
             {
@@ -92,7 +96,23 @@ namespace Day17
                 {
                     if (scene[y][x] == '*')
                     {
-                        Wall wall = new Wall(x, y, scene[y][x]);
+                        GameObject wall = new GameObject();
+                        wall.Name = "Wall";
+                        wall.transform.X = x;
+                        wall.transform.Y = y;
+
+                        SpriteRenderer spriteRenderer = wall.AddComponent<SpriteRenderer>();
+                        spriteRenderer.colorKey.r = 255;
+                        spriteRenderer.colorKey.g = 255;
+                        spriteRenderer.colorKey.b = 255;
+                        spriteRenderer.colorKey.a = 255;
+                        spriteRenderer.LoadBmp("wall.bmp");
+                        spriteRenderer.orderLayer = 2;
+
+                        spriteRenderer.Shape = '*';
+
+                        wall.AddComponent<BoxCollider2D>();
+
                         world.Instanciate(wall);
                     }
                     else if (scene[y][x] == ' ')
@@ -110,7 +130,7 @@ namespace Day17
                         player.transform.Y = y;
 
                         player.AddComponent<PlayerController>(new PlayerController());
-                        SpriteRenderer spriteRenderer = player.AddComponent<SpriteRenderer>(new SpriteRenderer());
+                        SpriteRenderer spriteRenderer = player.AddComponent<SpriteRenderer>();
                         spriteRenderer.colorKey.r = 255;
                         spriteRenderer.colorKey.g = 0;
                         spriteRenderer.colorKey.b = 255;
@@ -118,8 +138,12 @@ namespace Day17
                         spriteRenderer.LoadBmp("player.bmp", true);
                         spriteRenderer.processTime = 150.0f;
                         spriteRenderer.maxCellCountX = 5;
+                        spriteRenderer.orderLayer = 3;
 
                         spriteRenderer.Shape = 'P';
+
+                        player.AddComponent<CharacterController2D>();
+
 
                         world.Instanciate(player);
                     }
@@ -130,29 +154,69 @@ namespace Day17
                         monster.transform.X = x;
                         monster.transform.Y = y;
 
-                        SpriteRenderer spriteRenderer = monster.AddComponent<SpriteRenderer>(new SpriteRenderer());
+                        SpriteRenderer spriteRenderer = monster.AddComponent(new SpriteRenderer());
                         spriteRenderer.colorKey.r = 255;
                         spriteRenderer.colorKey.g = 255;
                         spriteRenderer.colorKey.b = 255;
                         spriteRenderer.colorKey.a = 255;
                         spriteRenderer.LoadBmp("monster.bmp");
+                        spriteRenderer.orderLayer = 4;
 
                         spriteRenderer.Shape = 'M';
-
+                        monster.AddComponent<AIController>(new AIController());
+                        CharacterController2D characterController2D = monster.AddComponent<CharacterController2D>();
+                        characterController2D.isTrigger = true;
 
                         world.Instanciate(monster);
                     }
                     else if (scene[y][x] == 'G')
                     {
-                        Goal goal = new Goal(x, y, scene[y][x]);
+                        GameObject goal = new GameObject();
+                        goal.Name = "Goal";
+                        goal.transform.X = x;
+                        goal.transform.Y = y;
+
+                        SpriteRenderer spriteRenderer = goal.AddComponent(new SpriteRenderer());
+                        spriteRenderer.colorKey.r = 255;
+                        spriteRenderer.colorKey.g = 255;
+                        spriteRenderer.colorKey.b = 255;
+                        spriteRenderer.colorKey.a = 255;
+                        spriteRenderer.LoadBmp("goal.bmp");
+                        spriteRenderer.orderLayer = 2;
+
+                        goal.AddComponent<CharacterController2D>().isTrigger = true;
+
+                        spriteRenderer.Shape = 'G';
+
                         world.Instanciate(goal);
                     }
-                    Floor floor = new Floor(x, y, ' ');
+                    GameObject floor = new GameObject();
+                    floor.Name = "Floor";
+                    floor.transform.X = x;
+                    floor.transform.Y = y;
+
+                    SpriteRenderer spriteRenderer2 = floor.AddComponent(new SpriteRenderer());
+                    spriteRenderer2.colorKey.r = 255;
+                    spriteRenderer2.colorKey.g = 255;
+                    spriteRenderer2.colorKey.b = 255;
+                    spriteRenderer2.colorKey.a = 255;
+                    spriteRenderer2.LoadBmp("floor.bmp");
+                    spriteRenderer2.orderLayer = 1;
+
+
+                    spriteRenderer2.Shape = ' ';
+
                     world.Instanciate(floor);
                 }
+                GameObject gameManager = new GameObject();
+                gameManager.Name = "GameManager";
+
+                gameManager.AddComponent<GameManager>();
+                world.Instanciate(gameManager);
+
             }
             world.Sort();
-
+            Awake();
         }
 
         protected void Update()
@@ -199,6 +263,9 @@ namespace Day17
         {
 
             Console.CursorVisible = false;
+
+            Awake();
+
             while (isRunning)
             {
                 SDL.SDL_PollEvent(out myEvnet);
@@ -217,9 +284,14 @@ namespace Day17
 
         }
 
+        public void Awake() { 
+            world.Awake();
+        }
 
+        public void SetSortCompare(World.SortCompare inSortCompare)
+        {
+            world.sortCompare = inSortCompare;
+        }
 
-
-        public World world;
     }
 }

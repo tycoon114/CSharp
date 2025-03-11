@@ -8,8 +8,10 @@ namespace Day17
 {
     public class World
     {
-        //public GameObject[] gameObjects =  new GameObject[100];
-        //protected int useGameObjectCount = 0;
+        public delegate int SortCompare(GameObject first, GameObject second);
+        public SortCompare sortCompare;
+
+
 
         List<GameObject> gameObjects = new List<GameObject>();
 
@@ -43,18 +45,31 @@ namespace Day17
 
         public void Sort()
         {
-            //for (int i = 0; i < gameObjects.Count; i++) {
-            //    for (int j = i+1; j < gameObjects.Count; j++) {
-            //        if (gameObjects[i].orderLayer - gameObjects[j].orderLayer > 0) { 
-            //            GameObject temp = gameObjects[i];
-            //            gameObjects[i] = gameObjects[j];
-            //            gameObjects[j] = temp;
-            //        }
-            //    }
-            //}
+            for (int i = 0; i < gameObjects.Count; i++)
+            {
+                for (int j = i + 1; j < gameObjects.Count; j++)
+                {
+
+                    if (sortCompare(gameObjects[i], gameObjects[j]) > 0)
+                    {
+                        GameObject temp = gameObjects[i];
+                        gameObjects[i] = gameObjects[j];
+                        gameObjects[j] = temp;
+                    }
+                }
+            }
 
         }
 
+        public void Awake() {
+            foreach (var choiceObject in gameObjects) {
+                foreach (Component component in choiceObject.components)
+                {
+                    component.Awake();
+                }
+            }
+            
+        }
 
         public void Update()
         {

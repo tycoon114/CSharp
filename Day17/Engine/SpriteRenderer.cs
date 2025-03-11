@@ -15,8 +15,8 @@ namespace Day17
         public int spriteSize = 30;
         public SDL.SDL_Color color;
 
-        protected int spriteIndexX = 0;
-        protected int spriteIndexY = 0;
+        public int spriteIndexX = 0;
+        public int spriteIndexY = 0;
 
         public SDL.SDL_Color colorKey;
 
