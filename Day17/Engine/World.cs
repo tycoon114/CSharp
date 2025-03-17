@@ -21,6 +21,10 @@ namespace Day17
             {
                 return gameObjects;
             }
+            set
+            {
+                gameObjects = value;
+            }
         }
 
 

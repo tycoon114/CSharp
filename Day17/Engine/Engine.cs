@@ -4,6 +4,7 @@ using SDL2;
 using System.Drawing;
 using System.Numerics;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace Day17
 {
@@ -217,6 +218,31 @@ namespace Day17
             }
             world.Sort();
             Awake();
+
+
+            //string SceneFile = JsonConvert.SerializeObject(world.GetAllGameObjects, new JsonSerializerSettings
+            //{
+            //    TypeNameHandling = TypeNameHandling.All,
+            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            //});
+            //Console.WriteLine(SceneFile);
+
+            //StreamWriter sw = new StreamWriter("sample.uasset");
+            //sw.WriteLine(SceneFile);
+            //sw.Close();
+
+            //StreamReader sr2 = new StreamReader("sample.uasset");
+            //string SceneFile = sr2.ReadToEnd();
+            //sr2.Close();
+
+
+            //world.GetAllGameObjects = JsonConvert.DeserializeObject<List<GameObject>>(SceneFile, new JsonSerializerSettings
+            //{
+            //    TypeNameHandling = TypeNameHandling.All,
+            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            //});
+
+
         }
 
         protected void Update()
