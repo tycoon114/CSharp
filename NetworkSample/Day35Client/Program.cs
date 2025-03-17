@@ -20,7 +20,7 @@ namespace Day35Client
 
 
             byte[] buffer;
-            String message = "100+200";
+            String message = "100 + 200";
             buffer = Encoding.UTF8.GetBytes(message);
 
             int sendLength = serverSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
