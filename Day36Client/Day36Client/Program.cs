@@ -26,7 +26,6 @@ namespace Day36Client
 
             byte[] recieveBuffer = new byte[1048];
             serverSocket.Receive(recieveBuffer);
-
             Console.WriteLine(Encoding.UTF8.GetString(recieveBuffer));
 
             serverSocket.Close();

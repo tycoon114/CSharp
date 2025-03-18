@@ -27,6 +27,8 @@ namespace Day36Server
             {
                 Socket clientSocket = listenSocket.Accept();
                 byte[] buffer = new byte[1024];
+
+                //OS 내부 버퍼에서 복사해온다. 자료를 전부 받아오는게 아님
                 int recieveLength = clientSocket.Receive(buffer);
                 string jsonServerMessage;
                 Console.WriteLine(Encoding.UTF8.GetString(buffer));
@@ -42,21 +44,16 @@ namespace Day36Server
                     {
                         jsonServerMessage = "{ \"message\" : \"반가워요\"}";
                         sendBuffer = Encoding.UTF8.GetBytes(jsonServerMessage);
-                        clientSocket.Send(sendBuffer);
+                        //OS 내부 버퍼에서 복사함, 자료의 전부를 보내는게 아님
+                        int sendLength = clientSocket.Send(sendBuffer);
                     }
                     else
                     {
-                        //jsonServerMessage = "{ \"message\" : \"아니요\"}";
                         clientSocket.Close();
                     }
-
                 }
                 clientSocket.Close();
-
-
-
             }
-
             listenSocket.Close();
         }
     }
