@@ -41,14 +41,15 @@ namespace Day36Server
                     if (message.Equals("안녕하세요"))
                     {
                         jsonServerMessage = "{ \"message\" : \"반가워요\"}";
+                        sendBuffer = Encoding.UTF8.GetBytes(jsonServerMessage);
+                        clientSocket.Send(sendBuffer);
                     }
                     else
                     {
-                        jsonServerMessage = "{ \"message\" : \"아니요\"}";
+                        //jsonServerMessage = "{ \"message\" : \"아니요\"}";
+                        clientSocket.Close();
                     }
 
-                    sendBuffer = Encoding.UTF8.GetBytes(jsonServerMessage);
-                    clientSocket.Send(sendBuffer);
                 }
                 clientSocket.Close();
 
