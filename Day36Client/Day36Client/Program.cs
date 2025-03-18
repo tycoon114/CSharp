@@ -19,12 +19,16 @@ namespace Day36Client
 
             byte[] buffer;
             string jsonClientMessage = "{ \"message\" : \"안녕하세요\"}";
-
             buffer = Encoding.UTF8.GetBytes(jsonClientMessage);
+
+
 
             serverSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
 
             byte[] recieveBuffer = new byte[1048];
+
+
+
             serverSocket.Receive(recieveBuffer);
             Console.WriteLine(Encoding.UTF8.GetString(recieveBuffer));
 
