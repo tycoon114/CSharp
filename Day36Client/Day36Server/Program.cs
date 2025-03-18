@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Day36Server
 {
@@ -22,20 +23,37 @@ namespace Day36Server
             listenSocket.Bind(serverEndPoint);
             listenSocket.Listen(10);
 
-            while (isRunning) { 
+            while (isRunning)
+            {
                 Socket clientSocket = listenSocket.Accept();
                 byte[] buffer = new byte[1024];
                 int recieveLength = clientSocket.Receive(buffer);
-
+                string jsonServerMessage;
                 Console.WriteLine(Encoding.UTF8.GetString(buffer));
 
                 byte[] sendBuffer;
-                if (recieveLength > 0) {
-                    String sendMessage = "반가워요";
-                    sendBuffer = Encoding.UTF8.GetBytes(sendMessage);
+                if (recieveLength > 0)
+                {
+                    string recieveMessage = Encoding.UTF8.GetString(buffer);
+                    JObject jsonObject = JObject.Parse(recieveMessage);
+                    string message = jsonObject["message"].ToString();
+
+                    if (message.Equals("안녕하세요"))
+                    {
+                        jsonServerMessage = "{ \"message\" : \"반가워요\"}";
+                    }
+                    else
+                    {
+                        jsonServerMessage = "{ \"message\" : \"아니요\"}";
+                    }
+
+                    sendBuffer = Encoding.UTF8.GetBytes(jsonServerMessage);
                     clientSocket.Send(sendBuffer);
                 }
                 clientSocket.Close();
+
+
+
             }
 
             listenSocket.Close();
