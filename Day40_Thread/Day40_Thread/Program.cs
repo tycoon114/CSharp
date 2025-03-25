@@ -11,7 +11,8 @@ namespace Day40_Thread
     class Program
     {
         static Object _lock = new Object(); //동기화 객체
-
+                                                //스핀락 - 한번쯤은 구현 해 볼것
+                                                //Interlocked.CompareExchange()
         //atomic, 공유영역 작업은 원자성, 중간 끊지 말라고
         //나 끝날때까지 다 하지마
         static int Money = 0;
