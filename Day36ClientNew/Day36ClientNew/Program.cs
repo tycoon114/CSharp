@@ -6,83 +6,68 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Day36ClientNew
 {
     class Program
     {
-
         static Socket clientSocket;
-        struct Packet
+
+        static void SendPacket(Socket toSocket, string message)
         {
-            //[][]
-            string id; //20
-            //[][]
-            string message; //40
+            byte[] messageBuffer = Encoding.UTF8.GetBytes(message);
+            ushort length = (ushort)IPAddress.HostToNetworkOrder((short)messageBuffer.Length);
+
+            byte[] headerBuffer = BitConverter.GetBytes(length);
+
+            byte[] packetBuffer = new byte[headerBuffer.Length + messageBuffer.Length];
+            Buffer.BlockCopy(headerBuffer, 0, packetBuffer, 0, headerBuffer.Length);
+            Buffer.BlockCopy(messageBuffer, 0, packetBuffer, headerBuffer.Length, messageBuffer.Length);
+
+            int SendLength = toSocket.Send(packetBuffer, packetBuffer.Length, SocketFlags.None);
+
         }
 
-        static void ChatInput()
+        static void RecvPacket(Socket toSocket, out string jsonString)
         {
-            while (true)
-            {
-                string InputChat;
-                Console.Write("채팅 : ");
-                InputChat = Console.ReadLine();
+            byte[] lengthBuffer = new byte[2];
 
-                string jsonString = "{\"id\" : \"asdf\",  \"message\" : \"" + InputChat + ".\"}";
-                byte[] message = Encoding.UTF8.GetBytes(jsonString);
-                ushort length = (ushort)message.Length;
+            int RecvLength = clientSocket.Receive(lengthBuffer, 2, SocketFlags.None);
+            ushort length = BitConverter.ToUInt16(lengthBuffer, 0);
+            length = (ushort)IPAddress.NetworkToHostOrder((short)length);
+            byte[] recvBuffer = new byte[4096];
+            RecvLength = clientSocket.Receive(recvBuffer, length, SocketFlags.None);
 
-                byte[] lengthBuffer = new byte[2];
-                lengthBuffer = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)length));
-
-                byte[] buffer = new byte[2 + length];
-
-                Buffer.BlockCopy(lengthBuffer, 0, buffer, 0, 2);
-                Buffer.BlockCopy(message, 0, buffer, 2, length);
-
-                int SendLength = clientSocket.Send(buffer, buffer.Length, SocketFlags.None);
-            }
+            jsonString = Encoding.UTF8.GetString(recvBuffer);
         }
-
-
-        static void RecvThread()
-        {
-            while (true)
-            {
-                byte[] lengthBuffer = new byte[2];
-
-                int RecvLength = clientSocket.Receive(lengthBuffer, 2, SocketFlags.None);
-                ushort length = BitConverter.ToUInt16(lengthBuffer, 0);
-                length = (ushort)IPAddress.NetworkToHostOrder((short)length);
-                byte[] recvBuffer = new byte[4096];
-                RecvLength = clientSocket.Receive(recvBuffer, length, SocketFlags.None);
-
-                string JsonString = Encoding.UTF8.GetString(recvBuffer);
-
-                Console.WriteLine(JsonString);
-            }
-        }
-
 
         static void Main(string[] args)
         {
             clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
             IPEndPoint listenEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 4000);
+
             clientSocket.Connect(listenEndPoint);
 
-            Thread chatInputThread = new Thread(new ThreadStart(ChatInput));
-            Thread recvThread = new Thread(new ThreadStart(RecvThread));
+            JObject result = new JObject();
+            //result.Add("code", "Login");
+            //result.Add("id", "htk008");
+            //result.Add("password", "1235");
+            //SendPacket(clientSocket, result.ToString());
 
+            result.Add("code", "Signup");
+            result.Add("id", "robot2");
+            result.Add("password", "1234");
+            result.Add("name", "로봇2");
+            result.Add("email", "robot@a.com");
+            SendPacket(clientSocket, result.ToString());
 
-            chatInputThread.IsBackground = true;
-            chatInputThread.Start();            //쓰레드가 실제로 시작되었다는 의미가 아닌 OS에 등록했다는 의미, 쓰레드는 언제 시작될지 모름?
-            recvThread.IsBackground = true;
-            recvThread.Start();
+            string JsonString;
+            RecvPacket(clientSocket, out JsonString);
 
+            Console.WriteLine(JsonString);
 
-            chatInputThread.Join();
-            recvThread.Join();
 
             clientSocket.Close();
         }
