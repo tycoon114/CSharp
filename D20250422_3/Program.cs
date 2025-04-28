@@ -9,7 +9,6 @@ namespace D20250422_3
 {
     internal class Program
     {
-
         //각 노드의 부모는 누구인가?
         //트리의 부모는 하나라는 성질을 이용해서 풀이
         //순차 : 배열
@@ -19,7 +18,6 @@ namespace D20250422_3
         //노드의 타입은? 
         //ㄴ어떤 데이터가 모여야 노드라고 정의?
         //ㄴ자식 노드, 부모 노드
-
 
         static int[] parent = new int[100001];
         static int N;
@@ -46,8 +44,8 @@ namespace D20250422_3
                 int u = arr[0];
                 int v = arr[1];
 
-                graph[u].Add(v);
-                graph[v].Add(u);
+                graph[u-1].Add(v);
+                graph[v-1].Add(u);
             }
 
             SetParent(1);
@@ -59,14 +57,10 @@ namespace D20250422_3
 
             //모든 노드 마다 자식에게 본인이 부모라는 것을 알려준다.
             // 모든 노드마다 parent[child] = node
-
-
             for (int node = 2; node <= N; node++)
             {
                 Console.Write(parent[node]);
             }
-
-
         }
 
         //DFS
@@ -85,9 +79,6 @@ namespace D20250422_3
                     SetParent(child);
                 }
             }
-
-
         }
-
     }
 }
