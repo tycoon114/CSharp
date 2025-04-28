@@ -24,7 +24,7 @@
         {
             ConstructGraph();
 
-
+            Console.WriteLine(GetDistance(0, 3));
         }
 
         //GetDistance : 최단 거리를 구하는 함수
@@ -54,16 +54,17 @@
                 int next = pq.Dequeue();
 
                 // 3.2 dist 배열 갱신
-                for (int v = 0; v < graph[v].Length; v++)   //연결된 정점만 살펴본다.
+                for (int v = 0; v < graph[next].Length; v++)   //연결된 정점만 살펴본다.
                 {
-                    int disViaNext = dist[v] + graph[next][v];  //start에서 next -> v 로 가는 최단 거리 계산
+
+                    int disViaNext = dist[next] + graph[next][v];  //start에서 next -> v 로 가는 최단 거리 계산
 
                     //최단거리 비교
                     //ㄴ start -> next -> v가 더 짧다면 갱신하고,pq에 삽입
                     if (disViaNext < dist[v])
                     {
                         dist[v] = disViaNext;
-                        pq.Enqueue(dist[v], disViaNext);
+                        pq.Enqueue(v, dist[v]);
                     }
                 }
             }
